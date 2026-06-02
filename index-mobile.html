@@ -93,8 +93,18 @@
       </g>
 
       <!-- ═══════════════ MIDDLE: SYNC CENTER ═══════════════ -->
-      <!-- "IN" invoice slips — drawn FIRST so they appear partly covered by the circle. -->
-      <image href="assets/dark/invoices.svg" x="232" y="315" width="60" height="58"/>
+      <!--
+        "IN" invoice slips — drawn FIRST so they appear partly covered by the circle.
+
+        ★ LANGUAGE SWAP TARGET ★
+        The letters on the slips reflect the page language:
+          English page → assets/dark/invoices-en.webp   (default, "IN")
+          German page  → assets/dark/invoices-de.webp   ("RE" for "Rechnung")
+
+        In Hugo:
+          <image href='{{ printf "assets/dark/invoices-%s.webp" .Site.Language.Lang }}' ...
+      -->
+      <image href="assets/dark/invoices-en.webp" x="232" y="315" width="60" height="58"/>
 
       <!-- Sync circle (opaque fill hides the part of the slips behind it) -->
       <g filter="url(#cyanGlow)">
@@ -117,13 +127,13 @@
 
       <!-- TOP return-arrow bubble — drawn AFTER circle so it sits in front, overlapping circle top -->
       <g filter="url(#cyanGlowStrong)">
-        <image href="assets/dark/return-arrow.svg"
+        <image href="assets/dark/return-arrow.webp"
                x="170" y="283" width="40" height="40"/>
       </g>
 
       <!-- BOTTOM return-arrow bubble — drawn AFTER circle so it sits in front, overlapping circle bottom -->
       <g filter="url(#cyanGlowStrong)">
-        <image href="assets/dark/return-arrow.svg"
+        <image href="assets/dark/return-arrow.webp"
                x="170" y="385" width="40" height="40"/>
       </g>
 
@@ -188,15 +198,15 @@
     <!-- ═══════════════ SMARTPHONE CONTENT — infinite scroll ═══════════════ -->
     <div class="phone-content">
       <div class="phone-scroll">
-        <img src="assets/dark/lexware-office.png" alt="Lexware Office">
-        <img src="assets/common/datev.png"        alt="DATEV">
-        <img src="assets/dark/addison.png"        alt="Addison">
-        <img src="assets/dark/fastbill.png"       alt="FastBill">
+        <img src="assets/dark/lexware-office.webp" alt="Lexware Office">
+        <img src="assets/dark/datev.webp"        alt="DATEV">
+        <img src="assets/dark/addison.webp"        alt="Addison">
+        <img src="assets/dark/fastbill.webp"       alt="FastBill">
         <!-- Loop duplicate (must mirror the original set) -->
-        <img src="assets/dark/lexware-office.png" alt="" aria-hidden="true">
-        <img src="assets/common/datev.png"        alt="" aria-hidden="true">
-        <img src="assets/dark/addison.png"        alt="" aria-hidden="true">
-        <img src="assets/dark/fastbill.png"       alt="" aria-hidden="true">
+        <img src="assets/dark/lexware-office.webp" alt="" aria-hidden="true">
+        <img src="assets/dark/datev.webp"        alt="" aria-hidden="true">
+        <img src="assets/dark/addison.webp"        alt="" aria-hidden="true">
+        <img src="assets/dark/fastbill.webp"       alt="" aria-hidden="true">
       </div>
     </div>
 
