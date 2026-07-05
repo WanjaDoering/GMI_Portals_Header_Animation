@@ -24,6 +24,13 @@ Live preview:
 - https://wanjadoering.github.io/GMI_Portals_Header_Animation/index-mobile.html
 - https://wanjadoering.github.io/GMI_Portals_Header_Animation/index-mobile-light.html
 
+**Language preview:** append `?lang=de` (or `es` / `fr` / `nl`) to any URL above
+to preview that language's asset set, e.g.
+https://wanjadoering.github.io/GMI_Portals_Header_Animation/?lang=de
+(English is the default.) This query parameter is a preview helper in
+`script.js` only — production binds the language at template level, see
+[Language-bound assets](#-language-bound-assets-per-page-language).
+
 ---
 
 ## File structure
@@ -39,31 +46,37 @@ Website_Header/
 ├── style-mobile.css                Mobile styles (portrait layout)
 ├── script.js                       Shared animation loop + drag/wheel/touch handlers
 └── assets/
-    ├── common/                     used by ALL variants
-    │   ├── dhl.png                 center logo on the portal box (★ swap target)
-    │   └── *.svg                   8 portal logos: google, facebook, adobe,
-    │                               amazon, openai, spotify, vodafone
-    ├── dark/                       used by Desktop Dark + Mobile Dark
-    │   ├── invoices-en.webp        "IN" invoice slips, English ("IN")
-    │   ├── invoices-de.webp        "RE" invoice slips, German ("Rechnung")
-    │   ├── return-arrow.webp       sync bubble icon (dark version)
-    │   ├── datev.webp              phone-scroll: DATEV (dark variant)
-    │   ├── lexware-office.webp     phone-scroll: Lexware Office
-    │   ├── addison.webp            phone-scroll: Addison
-    │   └── fastbill.webp           phone-scroll: FastBill
-    └── light/                      used by Desktop Light + Mobile Light
-        ├── invoices-en.webp        "IN" slips, English (soft grey)
-        ├── invoices-de.webp        "RE" slips, German (soft grey)
-        ├── return-arrow.webp       sync bubble (cyan-filled circle)
-        ├── arrow.svg               polished arrow used between regions
-        ├── datev.webp              phone-scroll: DATEV (light variant)
-        ├── lexware-office.webp     phone-scroll: Lexware Office (black for white BG)
-        ├── addison.webp            phone-scroll: Addison (black)
-        └── fastbill.webp           phone-scroll: FastBill (black)
+    ├── common/                     page-bound, used by ALL variants + languages
+    │   ├── dhl.png                 center logo on the portal box (★ swap target,
+    │   │                           set per portal subpage from the product DB)
+    │   └── *.svg                   swap candidates for the center logo
+    ├── dark/                       theme-only UI graphics (NOT language-bound)
+    │   └── return-arrow.webp       sync bubble icon (dark version)
+    ├── light/                      theme-only UI graphics (NOT language-bound)
+    │   ├── return-arrow.webp       sync bubble (cyan-filled circle)
+    │   └── arrow.svg               polished arrow used between regions
+    └── <lang>/                     ★ LANGUAGE-BOUND ★ one folder per language:
+        │                           de/  en/  es/  fr/  nl/
+        ├── portals/                8 orbiting portal logos for this market
+        │   └── google.svg, facebook.svg, adobe.svg, amazon.svg,
+        │       openai.svg, spotify.svg, vodafone.svg
+        ├── dark/                   language assets on dark theme
+        │   ├── invoices.webp       invoice slips ("IN" en / "RE" de / …)
+        │   ├── datev.webp          phone-scroll accounting logos
+        │   ├── lexware-office.webp
+        │   ├── addison.webp
+        │   └── fastbill.webp
+        └── light/                  same filenames, light-theme fills
 ```
 
-**Note on filenames:** files within `dark/` and `light/` use the same names.
-The variant is selected by the folder path, keeping the HTML readable.
+**Note on filenames:** files use the same names in every language and theme
+folder. The variant is selected purely by the folder path (`assets/<lang>/<theme>/…`),
+so swapping a market's graphics is a pure file replacement — no code changes.
+
+**⚠️ Placeholder status:** `en` and `de` invoice slips are real; everything
+else (es/fr/nl slips, all non-German accounting sets, per-country portal
+selections) currently holds copies of the existing set until the
+country-specific graphics are delivered.
 
 ---
 
@@ -91,8 +104,12 @@ No build step required — pure HTML/CSS/JS/SVG/WebP, runs in any modern browser
 
 ## ★ Dynamic swap targets
 
-The HTML has two places where assets are intended to change per page. Both
-are marked with a `★ … SWAP TARGET ★` comment so they're easy to find.
+Assets in this composition change along two independent axes, both marked
+with `★ … SWAP TARGET ★` comments in the HTML:
+
+1. **Per portal subpage** — the center logo (this section).
+2. **Per page language** — all content graphics
+   (next section, [Language-bound assets](#-language-bound-assets-per-page-language)).
 
 ### 1. Portal logo (per portal subpage)
 
@@ -123,27 +140,41 @@ portalLogo: /assets/common/google.svg
 For a global swap (one logo for all pages), just replace the file at
 `assets/common/dhl.png` — no code change needed.
 
-### 2. Invoice slips language (per page language)
+## ★ Language-bound assets (per page language)
 
-The "IN" letters on the invoice slips reflect the page language:
-- **English page** → `assets/dark/invoices-en.webp` (or `light/`)
-- **German page** → `assets/dark/invoices-de.webp` (or `light/`)
+**Every content graphic in this animation is bound to the page language** —
+each of the five markets (`de` / `en` / `es` / `fr` / `nl`) uses its own set.
+All language-bound paths follow one pattern:
 
-Marker comment: `★ LANGUAGE SWAP TARGET ★` near the `<image href="…/invoices-en.webp" …>` line.
+```
+assets/<lang>/portals/…      8 orbiting portal logos  (markets use different portals)
+assets/<lang>/dark/…         invoice slips + 4 accounting logos, dark theme
+assets/<lang>/light/…        same filenames, light theme
+```
 
-**Hugo example** (uses the active language code from Hugo's i18n):
+The four `index*.html` files ship with `en` hardcoded as default; every
+language-bound block is marked with a `★ LANGUAGE SWAP TARGET ★` comment
+(three per file: invoice slips, orbit logos, phone logos).
+
+**Hugo integration** — replace the folder segment with the active language:
 ```html
-<image href='{{ printf "assets/dark/invoices-%s.webp" .Site.Language.Lang }}' ... />
+<image href='{{ printf "assets/%s/dark/invoices.webp" .Site.Language.Lang }}' ... />
+<img src='{{ printf "assets/%s/portals/google.svg" .Site.Language.Lang }}' ... />
+<img src='{{ printf "assets/%s/dark/datev.webp" .Site.Language.Lang }}' ... />
 ```
 
 **React / Lovable example:**
 ```jsx
-<image href={`/assets/dark/invoices-${lang}.webp`} ... />
+<image href={`/assets/${lang}/dark/invoices.webp`} ... />
 ```
 
-Add more languages later by dropping additional files like
-`invoices-fr.webp`, `invoices-es.webp` into the dark/ and light/ folders —
-the templating expression resolves them automatically.
+NOT language-bound: the center portal logo (`assets/common/`, page-bound —
+see swap target #1 above) and the theme UI graphics
+(`assets/dark|light/return-arrow.webp`, `assets/light/arrow.svg`).
+
+Rolling out a market's graphics = replacing files inside its `assets/<lang>/`
+folder, keeping the filenames. No code changes. See the placeholder status
+note in the file-structure section for what is still pending.
 
 ---
 
@@ -151,17 +182,19 @@ the templating expression resolves them automatically.
 
 ### Swap a portal logo (orbit)
 
-The 8 orbiting logos live in `/assets/common/`. The fastest way to change one:
+The 8 orbiting logos live in `/assets/<lang>/portals/` (one folder per
+language). The fastest way to change one:
 
-**Option A — replace the file** (works for all four variants at once):
+**Option A — replace the file** (works for all four variants at once;
+repeat per language, or for every language if the change is global):
 ```bash
-cp my-new-google.svg assets/common/google.svg
+cp my-new-google.svg assets/en/portals/google.svg
 ```
 
 **Option B — change the path** (point to a different file):
 ```html
 <div class="logo-anchor" style="--start-frac: 0.05;">
-  <div class="logo-box"><img src="assets/common/google.svg" alt="Google"></div>
+  <div class="logo-box"><img src="assets/en/portals/google.svg" alt="Google"></div>
 </div>
 ```
 
@@ -169,20 +202,20 @@ Supported formats: SVG, PNG, JPG, WEBP, GIF.
 
 ### Swap a phone-scroll logo
 
-`assets/dark/` holds the variants visible on the dark phone background,
-`assets/light/` the variants for the white phone.
+`assets/<lang>/dark/` holds the variants visible on the dark phone background,
+`assets/<lang>/light/` the variants for the white phone — one set per language.
 
 When **adding** or **removing** a logo, edit both the original set AND the
 duplicate set inside `.phone-scroll` (they must stay in sync for the seamless loop):
 
 ```html
 <div class="phone-scroll">
-  <img src="assets/dark/lexware-office.webp" alt="Lexware Office">
-  <img src="assets/dark/datev.webp"          alt="DATEV">
+  <img src="assets/en/dark/lexware-office.webp" alt="Lexware Office">
+  <img src="assets/en/dark/datev.webp"       alt="DATEV">
   <!-- … -->
   <!-- duplicate set -->
-  <img src="assets/dark/lexware-office.webp" alt="" aria-hidden="true">
-  <img src="assets/dark/datev.webp"          alt="" aria-hidden="true">
+  <img src="assets/en/dark/lexware-office.webp" alt="" aria-hidden="true">
+  <img src="assets/en/dark/datev.webp"       alt="" aria-hidden="true">
   <!-- … -->
 </div>
 ```
@@ -214,10 +247,10 @@ These values are read by `script.js` at startup.
 | Portal box fill | dark gradient | `none` (transparent) |
 | All strokes | `#3c6e9d` (dark blue) | `#dde1ea` (soft grey-blue) |
 | Box-to-box arrows | inline white SVG paths | external `assets/light/arrow.svg` |
-| Invoice slips | `assets/dark/invoices-{lang}.webp` | `assets/light/invoices-{lang}.webp` |
+| Invoice slips | `assets/<lang>/dark/invoices.webp` | `assets/<lang>/light/invoices.webp` |
 | Sync bubbles | `assets/dark/return-arrow.webp` | `assets/light/return-arrow.webp` |
-| Phone logos | `assets/dark/*.webp` (colored) | `assets/light/*.webp` (black) |
-| 8 portal logos | `assets/common/*.svg` | `assets/common/*.svg` |
+| Phone logos | `assets/<lang>/dark/*.webp` (colored) | `assets/<lang>/light/*.webp` (black) |
+| 8 portal logos | `assets/<lang>/portals/*.svg` | `assets/<lang>/portals/*.svg` |
 | Portal centre logo | `assets/common/dhl.png` | `assets/common/dhl.png` |
 
 | Element | Desktop (824×344) | Mobile (380×700) |
@@ -273,8 +306,8 @@ All stable in modern browsers (2024+). No polyfills required.
 When updating the header:
 
 - [ ] Test all four variants after structural changes
-- [ ] If a logo changes: prefer file-replace in `/assets/common/` so all variants update at once
+- [ ] If a logo changes: prefer file-replace at the same path so all variants update at once (mind the language folders — repeat per `assets/<lang>/` if the change is global)
 - [ ] When editing `.phone-scroll`: keep the duplicate set in sync with the original set
-- [ ] When adding a new language variant: add `invoices-{lang}.webp` to BOTH `assets/dark/` and `assets/light/`
+- [ ] When adding a new language: copy a full `assets/<lang>/` folder (portals/ + dark/ + light/, same filenames) and replace its files
 - [ ] When adding new theme-switching tokens: declare in `:root` AND override in `body.light`
 - [ ] After GitHub Pages deploys, hard-refresh (Cmd+Shift+R) to bypass CDN cache

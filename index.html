@@ -26,14 +26,15 @@
       - Background colors of phone, center circle, portal box
       - Stroke colors
       - Inline "arrow between boxes" graphic (swapped for assets/light/arrow.svg)
-      - Center "IN" slips graphic (swapped for assets/light/invoices.svg)
+      - Center "IN" slips graphic (swapped for assets/<lang>/light/invoices.webp)
       - Sync bubble graphic (swapped for assets/light/return-arrow.svg)
       - Phone-scroll logos (swapped for black variants in assets/light/)
 
     ASSET ORGANIZATION
-    /assets/common/   shared by both variants (portal logos, DHL, DATEV)
-    /assets/dark/     dark-only graphics (invoices, return-arrow, phone logos)
-    /assets/light/    light-only graphics (same filenames as dark/, different fills)
+    /assets/common/            page-bound center logo (DHL ★ swap target) + swap candidates
+    /assets/<lang>/portals/    ★ LANGUAGE-BOUND ★ 8 orbiting portal logos (de/en/es/fr/nl)
+    /assets/<lang>/dark|light/ ★ LANGUAGE-BOUND ★ invoice slips + phone logos, per theme
+    /assets/dark|light/        theme-only UI graphics (return-arrow, arrow — not language-bound)
 
     COMMON CUSTOMIZATIONS
     ─ Swap a logo:           replace the file at the same path, no code change.
@@ -125,18 +126,20 @@
 
         ★ LANGUAGE SWAP TARGET ★
         The letters on the slips reflect the page language:
-          English page → assets/dark/invoices-en.webp   (default, "IN")
-          German page  → assets/dark/invoices-de.webp   ("RE" for "Rechnung")
+          English page → assets/en/dark/invoices.webp   (default, "IN")
+          German page  → assets/de/dark/invoices.webp   ("RE" for "Rechnung")
+          ES / FR / NL → assets/es|fr|nl/…/invoices.webp (currently placeholder
+                         copies of the EN slips until localized graphics exist)
 
         In Hugo:
-          <image href='{{ printf "assets/dark/invoices-%s.webp" .Site.Language.Lang }}' ...
+          <image href='{{ printf "assets/%s/dark/invoices.webp" .Site.Language.Lang }}' ...
         In React:
-          <image href={`/assets/dark/invoices-${lang}.webp`} ...
+          <image href={`/assets/${lang}/dark/invoices.webp`} ...
 
         For a global swap (e.g. one global asset set): just rename the
         webp file at the static path — no code change needed.
       -->
-      <image href="assets/dark/invoices-en.webp" x="411" y="38" width="108" height="106"/>
+      <image href="assets/en/dark/invoices.webp" x="411" y="38" width="108" height="106"/>
 
       <!-- CENTER: large download circle with gradient + glow -->
       <g filter="url(#cyanGlow)">
@@ -222,32 +225,41 @@
          The actual rotation animation is driven by script.js.
 
          To swap a logo: replace the src attribute (or replace the file
-         at assets/common/<filename> if you want both variants updated).
+         at assets/<lang>/portals/<filename> — per language!).
          ═══════════════════════════════════════════════════════════════════ -->
+    <!--
+      ★ LANGUAGE SWAP TARGET ★
+      The 8 orbiting portal logos are LANGUAGE-BOUND: every market shows its own
+      popular portals. All paths point into assets/<lang>/portals/ (en = default
+      in this file). Bind the folder to the page language, e.g. in Hugo:
+        <img src='{{ printf "assets/%s/portals/google.svg" .Site.Language.Lang }}' ...
+      NOTE: de/es/fr/nl currently hold COPIES of the EN set as placeholders
+      until the per-country portal sets are defined.
+    -->
     <div class="logos-orbit">
       <div class="logo-anchor" style="--start-frac: 0.05;">
-        <div class="logo-box"><img src="assets/common/google.svg" alt="Google"></div>
+        <div class="logo-box"><img src="assets/en/portals/google.svg" alt="Google"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.174;">
-        <div class="logo-box"><img src="assets/common/facebook.svg" alt="Facebook"></div>
+        <div class="logo-box"><img src="assets/en/portals/facebook.svg" alt="Facebook"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.30;">
-        <div class="logo-box"><img src="assets/common/adobe.svg" alt="Adobe"></div>
+        <div class="logo-box"><img src="assets/en/portals/adobe.svg" alt="Adobe"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.424;">
-        <div class="logo-box"><img src="assets/common/google.svg" alt="Google"></div>
+        <div class="logo-box"><img src="assets/en/portals/google.svg" alt="Google"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.55;">
-        <div class="logo-box"><img src="assets/common/spotify.svg" alt="Spotify"></div>
+        <div class="logo-box"><img src="assets/en/portals/spotify.svg" alt="Spotify"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.674;">
-        <div class="logo-box"><img src="assets/common/vodafone.svg" alt="Vodafone"></div>
+        <div class="logo-box"><img src="assets/en/portals/vodafone.svg" alt="Vodafone"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.80;">
-        <div class="logo-box"><img src="assets/common/openai.svg" alt="OpenAI"></div>
+        <div class="logo-box"><img src="assets/en/portals/openai.svg" alt="OpenAI"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.924;">
-        <div class="logo-box"><img src="assets/common/amazon.svg" alt="Amazon"></div>
+        <div class="logo-box"><img src="assets/en/portals/amazon.svg" alt="Amazon"></div>
       </div>
     </div>
 
@@ -258,17 +270,25 @@
          to enable a seamless scroll loop. Both sets MUST stay in sync —
          when adding/removing logos, edit both halves.
          ═══════════════════════════════════════════════════════════════════ -->
+    <!--
+      ★ LANGUAGE SWAP TARGET ★
+      The 4 accounting logos are LANGUAGE-BOUND: DATEV/Lexware/Addison/FastBill
+      is the GERMAN set — other markets export to other systems. Paths point
+      into assets/<lang>/dark/ or assets/<lang>/light/ (en = default in this
+      file). All five language folders currently hold this same set until the
+      per-country accounting sets are provided.
+    -->
     <div class="phone-content">
       <div class="phone-scroll">
-        <img src="assets/dark/lexware-office.webp" alt="Lexware Office">
-        <img src="assets/dark/datev.webp"        alt="DATEV">
-        <img src="assets/dark/addison.webp"        alt="Addison">
-        <img src="assets/dark/fastbill.webp"       alt="FastBill">
+        <img src="assets/en/dark/lexware-office.webp" alt="Lexware Office">
+        <img src="assets/en/dark/datev.webp"        alt="DATEV">
+        <img src="assets/en/dark/addison.webp"        alt="Addison">
+        <img src="assets/en/dark/fastbill.webp"       alt="FastBill">
         <!-- Loop duplicate (must mirror the original set) -->
-        <img src="assets/dark/lexware-office.webp" alt="" aria-hidden="true">
-        <img src="assets/dark/datev.webp"        alt="" aria-hidden="true">
-        <img src="assets/dark/addison.webp"        alt="" aria-hidden="true">
-        <img src="assets/dark/fastbill.webp"       alt="" aria-hidden="true">
+        <img src="assets/en/dark/lexware-office.webp" alt="" aria-hidden="true">
+        <img src="assets/en/dark/datev.webp"        alt="" aria-hidden="true">
+        <img src="assets/en/dark/addison.webp"        alt="" aria-hidden="true">
+        <img src="assets/en/dark/fastbill.webp"       alt="" aria-hidden="true">
       </div>
     </div>
 

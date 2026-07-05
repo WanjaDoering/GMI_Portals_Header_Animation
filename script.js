@@ -8,6 +8,23 @@
 (function () {
   'use strict';
 
+  /* ── PREVIEW ONLY: ?lang= swaps all language-bound assets ───────────────
+     e.g. index.html?lang=de — rewrites every assets/en/... path to the
+     requested language folder (de / es / fr / nl). On the production site
+     the language is bound at template level instead (see README,
+     "Language-bound assets") — do NOT ship this mechanism. */
+  const langParam = (new URLSearchParams(location.search).get('lang') || '').toLowerCase();
+  if (/^[a-z]{2}$/.test(langParam) && langParam !== 'en') {
+    const swap = s => s.replace('assets/en/', 'assets/' + langParam + '/');
+    document.querySelectorAll('img[src*="assets/en/"]').forEach(el => {
+      el.src = swap(el.getAttribute('src'));
+    });
+    document.querySelectorAll('image').forEach(el => {
+      const href = el.getAttribute('href');
+      if (href && href.includes('assets/en/')) el.setAttribute('href', swap(href));
+    });
+  }
+
   /* ── Setup: DOM references + initial values ─────────────────────────── */
   const root        = document.documentElement;
   const slots       = [...document.querySelectorAll('.logo-anchor')];

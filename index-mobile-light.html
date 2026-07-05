@@ -22,7 +22,7 @@
       ─ The two arrows use the polished assets/light/arrow.svg (rotated 90°,
         scaled 0.7) instead of inline white paths.
       ─ Invoice slips, sync bubbles, phone logos come from /assets/light/.
-      ─ DHL + DATEV + 8 portal logos are shared (/assets/common/).
+      ─ DHL center logo is shared (/assets/common/); portal + phone logos are language-bound (/assets/<lang>/).
 
     Animation logic is shared via script.js (no theme switch needed).
     See README.md for full overview.
@@ -96,13 +96,15 @@
 
         ★ LANGUAGE SWAP TARGET ★
         The letters on the slips reflect the page language:
-          English page → assets/light/invoices-en.webp   (default, "IN")
-          German page  → assets/light/invoices-de.webp   ("RE" for "Rechnung")
+          English page → assets/en/light/invoices.webp   (default, "IN")
+          German page  → assets/de/light/invoices.webp   ("RE" for "Rechnung")
+          ES / FR / NL → assets/es|fr|nl/…/invoices.webp (currently placeholder
+                         copies of the EN slips until localized graphics exist)
 
         In Hugo:
-          <image href='{{ printf "assets/light/invoices-%s.webp" .Site.Language.Lang }}' ...
+          <image href='{{ printf "assets/%s/light/invoices.webp" .Site.Language.Lang }}' ...
       -->
-      <image href="assets/light/invoices-en.webp" x="232" y="315" width="60" height="58"/>
+      <image href="assets/en/light/invoices.webp" x="232" y="315" width="60" height="58"/>
 
       <!-- Sync circle — WHITE fill, soft stroke -->
       <g filter="url(#cyanGlow)">
@@ -157,47 +159,64 @@
 
 
     <!-- ═══════════════ 8 PORTAL LOGOS — orbit (shared with dark variant) ═══════════════ -->
+    <!--
+      ★ LANGUAGE SWAP TARGET ★
+      The 8 orbiting portal logos are LANGUAGE-BOUND: every market shows its own
+      popular portals. All paths point into assets/<lang>/portals/ (en = default
+      in this file). Bind the folder to the page language, e.g. in Hugo:
+        <img src='{{ printf "assets/%s/portals/google.svg" .Site.Language.Lang }}' ...
+      NOTE: de/es/fr/nl currently hold COPIES of the EN set as placeholders
+      until the per-country portal sets are defined.
+    -->
     <div class="logos-orbit">
       <div class="logo-anchor" style="--start-frac: 0.05;">
-        <div class="logo-box"><img src="assets/common/google.svg" alt="Google"></div>
+        <div class="logo-box"><img src="assets/en/portals/google.svg" alt="Google"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.174;">
-        <div class="logo-box"><img src="assets/common/facebook.svg" alt="Facebook"></div>
+        <div class="logo-box"><img src="assets/en/portals/facebook.svg" alt="Facebook"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.30;">
-        <div class="logo-box"><img src="assets/common/adobe.svg" alt="Adobe"></div>
+        <div class="logo-box"><img src="assets/en/portals/adobe.svg" alt="Adobe"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.424;">
-        <div class="logo-box"><img src="assets/common/google.svg" alt="Google"></div>
+        <div class="logo-box"><img src="assets/en/portals/google.svg" alt="Google"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.55;">
-        <div class="logo-box"><img src="assets/common/spotify.svg" alt="Spotify"></div>
+        <div class="logo-box"><img src="assets/en/portals/spotify.svg" alt="Spotify"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.674;">
-        <div class="logo-box"><img src="assets/common/vodafone.svg" alt="Vodafone"></div>
+        <div class="logo-box"><img src="assets/en/portals/vodafone.svg" alt="Vodafone"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.80;">
-        <div class="logo-box"><img src="assets/common/openai.svg" alt="OpenAI"></div>
+        <div class="logo-box"><img src="assets/en/portals/openai.svg" alt="OpenAI"></div>
       </div>
       <div class="logo-anchor" style="--start-frac: 0.924;">
-        <div class="logo-box"><img src="assets/common/amazon.svg" alt="Amazon"></div>
+        <div class="logo-box"><img src="assets/en/portals/amazon.svg" alt="Amazon"></div>
       </div>
     </div>
 
 
     <!-- ═══════════════ SMARTPHONE CONTENT — infinite scroll ═══════════════ -->
     <!-- Light variant uses BLACK Lexware/Addison/FastBill logos (visible on white phone). DATEV is shared. -->
+    <!--
+      ★ LANGUAGE SWAP TARGET ★
+      The 4 accounting logos are LANGUAGE-BOUND: DATEV/Lexware/Addison/FastBill
+      is the GERMAN set — other markets export to other systems. Paths point
+      into assets/<lang>/dark/ or assets/<lang>/light/ (en = default in this
+      file). All five language folders currently hold this same set until the
+      per-country accounting sets are provided.
+    -->
     <div class="phone-content">
       <div class="phone-scroll">
-        <img src="assets/light/lexware-office.webp" alt="Lexware Office">
-        <img src="assets/light/datev.webp"         alt="DATEV">
-        <img src="assets/light/addison.webp"        alt="Addison">
-        <img src="assets/light/fastbill.webp"       alt="FastBill">
+        <img src="assets/en/light/lexware-office.webp" alt="Lexware Office">
+        <img src="assets/en/light/datev.webp"         alt="DATEV">
+        <img src="assets/en/light/addison.webp"        alt="Addison">
+        <img src="assets/en/light/fastbill.webp"       alt="FastBill">
         <!-- Loop duplicate (must mirror the original set) -->
-        <img src="assets/light/lexware-office.webp" alt="" aria-hidden="true">
-        <img src="assets/light/datev.webp"         alt="" aria-hidden="true">
-        <img src="assets/light/addison.webp"        alt="" aria-hidden="true">
-        <img src="assets/light/fastbill.webp"       alt="" aria-hidden="true">
+        <img src="assets/en/light/lexware-office.webp" alt="" aria-hidden="true">
+        <img src="assets/en/light/datev.webp"         alt="" aria-hidden="true">
+        <img src="assets/en/light/addison.webp"        alt="" aria-hidden="true">
+        <img src="assets/en/light/fastbill.webp"       alt="" aria-hidden="true">
       </div>
     </div>
 
