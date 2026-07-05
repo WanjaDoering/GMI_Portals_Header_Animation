@@ -200,23 +200,26 @@
     <!-- Light variant uses BLACK Lexware/Addison/FastBill logos (visible on white phone). DATEV is shared. -->
     <!--
       ★ LANGUAGE SWAP TARGET ★
-      The 4 accounting logos are LANGUAGE-BOUND: DATEV/Lexware/Addison/FastBill
-      is the GERMAN set — other markets export to other systems. Paths point
-      into assets/<lang>/dark/ or assets/<lang>/light/ (en = default in this
-      file). All five language folders currently hold this same set until the
-      per-country accounting sets are provided.
+      The 5 accounting/export logos are LANGUAGE-BOUND — every market shows its
+      own top integrations (defined in the hand-off Excel). Files use fixed
+      SLOT names export-1.webp … export-5.webp inside assets/<lang>/{theme}/,
+      so the markup is identical for all languages; only the folder changes
+      (en = default here). The alt texts below name the EN set — bind them to
+      the page language as well (slot contents per language: see README).
     -->
     <div class="phone-content">
       <div class="phone-scroll">
-        <img src="assets/en/light/lexware-office.webp" alt="Lexware Office">
-        <img src="assets/en/light/datev.webp"         alt="DATEV">
-        <img src="assets/en/light/addison.webp"        alt="Addison">
-        <img src="assets/en/light/fastbill.webp"       alt="FastBill">
+        <img src="assets/en/light/export-1.webp" alt="QuickBooks">
+        <img src="assets/en/light/export-2.webp" alt="Xero">
+        <img src="assets/en/light/export-3.webp" alt="FreshBooks">
+        <img src="assets/en/light/export-4.webp" alt="FreeAgent">
+        <img src="assets/en/light/export-5.webp" alt="Zoho Books">
         <!-- Loop duplicate (must mirror the original set) -->
-        <img src="assets/en/light/lexware-office.webp" alt="" aria-hidden="true">
-        <img src="assets/en/light/datev.webp"         alt="" aria-hidden="true">
-        <img src="assets/en/light/addison.webp"        alt="" aria-hidden="true">
-        <img src="assets/en/light/fastbill.webp"       alt="" aria-hidden="true">
+        <img src="assets/en/light/export-1.webp" alt="" aria-hidden="true">
+        <img src="assets/en/light/export-2.webp" alt="" aria-hidden="true">
+        <img src="assets/en/light/export-3.webp" alt="" aria-hidden="true">
+        <img src="assets/en/light/export-4.webp" alt="" aria-hidden="true">
+        <img src="assets/en/light/export-5.webp" alt="" aria-hidden="true">
       </div>
     </div>
 

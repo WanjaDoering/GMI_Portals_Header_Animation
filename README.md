@@ -7,7 +7,7 @@ portal-to-system invoice flow with three regions:
 |---|---|---|
 | **Portal box** | Inner DHL logo + 8 portal logos | Logos orbit along the dashed border (60s/cycle), draggable |
 | **Sync hub** | Download icon, "IN" slips, two sync bubbles | Static composition |
-| **Smartphone** | 4 accounting export logos | Vertical infinite scroll (16s/cycle), wheel/drag, pause on hover |
+| **Smartphone** | 5 accounting/export logos (top integrations per language) | Vertical infinite scroll (16s/cycle), wheel/drag, pause on hover |
 
 Available in **four variants** that share the same animation logic:
 
@@ -62,10 +62,8 @@ Website_Header/
         │       openai.svg, spotify.svg, vodafone.svg
         ├── dark/                   language assets on dark theme
         │   ├── invoices.webp       invoice slips ("RE" de, "IN" all others)
-        │   ├── datev.webp          phone-scroll accounting logos
-        │   ├── lexware-office.webp
-        │   ├── addison.webp
-        │   └── fastbill.webp
+        │   └── export-1.webp …     the market's top-5 integrations for the
+        │       export-5.webp       phone scroll, in Excel ranking order
         └── light/                  same filenames, light-theme fills
 ```
 
@@ -73,12 +71,25 @@ Website_Header/
 folder. The variant is selected purely by the folder path (`assets/<lang>/<theme>/…`),
 so swapping a market's graphics is a pure file replacement — no code changes.
 
-**⚠️ Placeholder status:** the invoice slips are FINAL — German shows the
-localized "RE" slips, all other languages intentionally use the English "IN"
-slips. The logo sets (per-country portal selections + accounting sets) are
-still copies of the existing set; the country-specific logos are being
-delivered and will be dropped into the `assets/<lang>/` folders (same
-filenames, no code changes).
+**Status:** the invoice slips are FINAL — German shows the localized "RE"
+slips, all other languages intentionally use the English "IN" slips. The
+phone export logos are wired per market (table below). Still open:
+- the 8 orbiting **portal** logos are identical for all languages until
+  per-country portal selections are defined;
+- most **dark-theme** export logos were auto-generated (dark lettering
+  recolored to white) — design review recommended;
+- the **Spanish** slot 4 is an assumption (QuickBooks): the hand-off Excel
+  numbers its list 1,2,3,5 — one entry is missing.
+
+**Phone export logos per language** (slot = filename `export-<n>.webp`):
+
+| Slot | DE | EN | ES | FR | NL |
+|---|---|---|---|---|---|
+| 1 | DATEV | QuickBooks | Google Drive | PennyLane | Google Drive |
+| 2 | lexoffice | Xero | Dropbox | QuickBooks | Dropbox |
+| 3 | Google Drive | FreshBooks | Zoho Books | Xero | Zoho Books |
+| 4 | sevdesk | FreeAgent | QuickBooks ⚠️ | Google Drive | FreeAgent |
+| 5 | Addison | Zoho Books | FreeAgent | OneDrive | QuickBooks |
 
 ---
 
@@ -150,7 +161,7 @@ All language-bound paths follow one pattern:
 
 ```
 assets/<lang>/portals/…      8 orbiting portal logos  (markets use different portals)
-assets/<lang>/dark/…         invoice slips + 4 accounting logos, dark theme
+assets/<lang>/dark/…         invoice slips + 5 export logos (export-1…5), dark theme
 assets/<lang>/light/…        same filenames, light theme
 ```
 
@@ -207,20 +218,26 @@ Supported formats: SVG, PNG, JPG, WEBP, GIF.
 `assets/<lang>/dark/` holds the variants visible on the dark phone background,
 `assets/<lang>/light/` the variants for the white phone — one set per language.
 
-When **adding** or **removing** a logo, edit both the original set AND the
+The files use fixed slot names (`export-1.webp` … `export-5.webp`), so
+swapping a market's logo = replacing the file in that language's folder
+(both `dark/` and `light/`). Which brand sits in which slot: see the table
+in the file-structure section.
+
+When **adding** or **removing** a slot, edit both the original set AND the
 duplicate set inside `.phone-scroll` (they must stay in sync for the seamless loop):
 
 ```html
 <div class="phone-scroll">
-  <img src="assets/en/dark/lexware-office.webp" alt="Lexware Office">
-  <img src="assets/en/dark/datev.webp"       alt="DATEV">
+  <img src="assets/en/dark/export-1.webp" alt="QuickBooks">
   <!-- … -->
   <!-- duplicate set -->
-  <img src="assets/en/dark/lexware-office.webp" alt="" aria-hidden="true">
-  <img src="assets/en/dark/datev.webp"       alt="" aria-hidden="true">
+  <img src="assets/en/dark/export-1.webp" alt="" aria-hidden="true">
   <!-- … -->
 </div>
 ```
+
+The `alt` texts in the HTML name the EN set — bind them to the page
+language together with the asset paths.
 
 ### Animation speeds
 
