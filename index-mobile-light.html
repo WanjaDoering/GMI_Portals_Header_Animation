@@ -98,8 +98,8 @@
         The letters on the slips reflect the page language:
           English page → assets/en/light/invoices.webp   (default, "IN")
           German page  → assets/de/light/invoices.webp   ("RE" for "Rechnung")
-          ES / FR / NL → assets/es|fr|nl/…/invoices.webp (currently placeholder
-                         copies of the EN slips until localized graphics exist)
+          ES / FR / NL → assets/es|fr|nl/…/invoices.webp (INTENTIONALLY the EN
+                         "IN" slips — only German gets localized slips)
 
         In Hugo:
           <image href='{{ printf "assets/%s/light/invoices.webp" .Site.Language.Lang }}' ...

@@ -61,7 +61,7 @@ Website_Header/
         │   └── google.svg, facebook.svg, adobe.svg, amazon.svg,
         │       openai.svg, spotify.svg, vodafone.svg
         ├── dark/                   language assets on dark theme
-        │   ├── invoices.webp       invoice slips ("IN" en / "RE" de / …)
+        │   ├── invoices.webp       invoice slips ("RE" de, "IN" all others)
         │   ├── datev.webp          phone-scroll accounting logos
         │   ├── lexware-office.webp
         │   ├── addison.webp
@@ -73,10 +73,12 @@ Website_Header/
 folder. The variant is selected purely by the folder path (`assets/<lang>/<theme>/…`),
 so swapping a market's graphics is a pure file replacement — no code changes.
 
-**⚠️ Placeholder status:** `en` and `de` invoice slips are real; everything
-else (es/fr/nl slips, all non-German accounting sets, per-country portal
-selections) currently holds copies of the existing set until the
-country-specific graphics are delivered.
+**⚠️ Placeholder status:** the invoice slips are FINAL — German shows the
+localized "RE" slips, all other languages intentionally use the English "IN"
+slips. The logo sets (per-country portal selections + accounting sets) are
+still copies of the existing set; the country-specific logos are being
+delivered and will be dropped into the `assets/<lang>/` folders (same
+filenames, no code changes).
 
 ---
 
