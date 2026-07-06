@@ -7,7 +7,7 @@ portal-to-system invoice flow with three regions:
 |---|---|---|
 | **Portal box** | Inner DHL logo + 8 portal logos | Logos orbit along the dashed border (60s/cycle), draggable |
 | **Sync hub** | Download icon, "IN" slips, two sync bubbles | Static composition |
-| **Smartphone** | 5 accounting/export logos (top integrations per language) | Vertical infinite scroll (16s/cycle), wheel/drag, pause on hover |
+| **Smartphone** | 4–5 accounting/export logos (top integrations per language) | Vertical infinite scroll (16s/cycle), wheel/drag, pause on hover |
 
 Available in **four variants** that share the same animation logic:
 
@@ -62,8 +62,9 @@ Website_Header/
         │       openai.svg, spotify.svg, vodafone.svg
         ├── dark/                   language assets on dark theme
         │   ├── invoices.webp       invoice slips ("RE" de, "IN" all others)
-        │   └── export-1.webp …     the market's top-5 integrations for the
+        │   └── export-1.webp …     the market's top integrations for the
         │       export-5.webp       phone scroll, in Excel ranking order
+        │                           (4 slots for es, 5 everywhere else)
         └── light/                  same filenames, light-theme fills
 ```
 
@@ -226,8 +227,13 @@ swapping a market's logo = replacing the file in that language's folder
 (both `dark/` and `light/`). Which brand sits in which slot: see the table
 in the file-structure section.
 
-When **adding** or **removing** a slot, edit both the original set AND the
-duplicate set inside `.phone-scroll` (they must stay in sync for the seamless loop):
+A market may fill fewer than 5 slots (Spanish uses 4): `script.js`
+automatically drops `<img>` elements whose slot file does not exist, so
+no markup change is needed — just delete the file in `dark/` and `light/`.
+
+When **adding** a slot (or changing the markup itself), edit both the
+original set AND the duplicate set inside `.phone-scroll` (they must stay
+in sync for the seamless loop):
 
 ```html
 <div class="phone-scroll">
