@@ -77,9 +77,7 @@ phone export logos are wired per market (table below). Still open:
 - the 8 orbiting **portal** logos are identical for all languages until
   per-country portal selections are defined;
 - most **dark-theme** export logos were auto-generated (dark lettering
-  recolored to white) — design review recommended;
-- the **Spanish** slot 4 is an assumption (QuickBooks): the hand-off Excel
-  numbers its list 1,2,3,5 — one entry is missing.
+  recolored to white) — design review recommended.
 
 **Phone export logos per language** (slot = filename `export-<n>.webp`):
 
@@ -88,8 +86,13 @@ phone export logos are wired per market (table below). Still open:
 | 1 | DATEV | QuickBooks | Google Drive | PennyLane | Google Drive |
 | 2 | lexoffice | Xero | Dropbox | QuickBooks | Dropbox |
 | 3 | Google Drive | FreshBooks | Zoho Books | Xero | Zoho Books |
-| 4 | sevdesk | FreeAgent | QuickBooks ⚠️ | Google Drive | FreeAgent |
-| 5 | Addison | Zoho Books | FreeAgent | OneDrive | QuickBooks |
+| 4 | sevdesk | FreeAgent | FreeAgent | Google Drive | FreeAgent |
+| 5 | Addison | Zoho Books | — | OneDrive | QuickBooks |
+
+**Spanish has only 4 export logos** (confirmed): there is no
+`export-5.webp` in `assets/es/`. `script.js` drops `<img>` elements whose
+slot file is missing, so the 5-slot markup works unchanged; a production
+template should simply render only the slots that exist for the market.
 
 ---
 

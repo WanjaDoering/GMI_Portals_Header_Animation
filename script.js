@@ -25,6 +25,15 @@
     });
   }
 
+  /* ── Missing slot files: not every market fills all 5 slots (Spanish
+     has only 4 export logos). Remove an <img> whose file fails to load —
+     the loop duplicate fails identically, so the 2×-content assumption
+     behind the -50% translateY in applyScroll() stays intact. */
+  document.querySelectorAll('.phone-scroll img').forEach(el => {
+    if (el.complete && el.naturalWidth === 0) { el.remove(); return; }
+    el.addEventListener('error', () => el.remove());
+  });
+
   /* ── Setup: DOM references + initial values ─────────────────────────── */
   const root        = document.documentElement;
   const slots       = [...document.querySelectorAll('.logo-anchor')];
